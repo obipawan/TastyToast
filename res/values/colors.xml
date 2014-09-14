@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="confirm">#2ecc71</color>
+    <color name="alert">#e74c3c</color>
+    <color name="message">#3498db</color>
+
+</resources>
