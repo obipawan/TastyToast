@@ -19,7 +19,6 @@ public class TastyToast {
 	private static final int LENGTH_VAR_MAX = 10000;
 	private static final int LENGTH_VAR_MIN = LENGTH_SHORT;
 	
-	private static final int VAR_DURATION_TEXT_UPPER_THRESHOLD = 400;
 	private static final int VAR_DURATION_TEXT_LOWER_THRESHOLD = 120;
 
 	public static final Style STYLE_ALERT = new Style(LENGTH_LONG, R.color.alert);
@@ -31,7 +30,6 @@ public class TastyToast {
 	private View mView;
 	private LayoutParams mLayoutParams;
 	private boolean mFloating;
-	private boolean mVariableDuration;
 
 	public TastyToast(Activity context) {
 		mContext = context;
