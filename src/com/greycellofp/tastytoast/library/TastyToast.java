@@ -15,6 +15,12 @@ import com.greycellofp.tastytoast.R;
 public class TastyToast {
 	public static final int LENGTH_SHORT = 3000;
 	public static final int LENGTH_LONG = 5000;
+	
+	private static final int LENGTH_VAR_MAX = 10000;
+	private static final int LENGTH_VAR_MIN = LENGTH_SHORT;
+	
+	private static final int VAR_DURATION_TEXT_UPPER_THRESHOLD = 400;
+	private static final int VAR_DURATION_TEXT_LOWER_THRESHOLD = 120;
 
 	public static final Style STYLE_ALERT = new Style(LENGTH_LONG, R.color.alert);
 	public static final Style STYLE_CONFIRM = new Style(LENGTH_SHORT, R.color.confirm);
@@ -25,6 +31,7 @@ public class TastyToast {
 	private View mView;
 	private LayoutParams mLayoutParams;
 	private boolean mFloating;
+	private boolean mVariableDuration;
 
 	public TastyToast(Activity context) {
 		mContext = context;
@@ -184,6 +191,24 @@ public class TastyToast {
 				));
 		return this;
 	}
+    
+    public TastyToast enableVariableDuration(){
+    	TextView tv = (TextView) getView().findViewById(android.R.id.message);
+    	int charLength = tv.getText().toString().length();
+    	int duration = charLength * LENGTH_SHORT / VAR_DURATION_TEXT_LOWER_THRESHOLD;
+    	if(duration < LENGTH_VAR_MIN)
+    		duration = LENGTH_VAR_MIN;
+    	if(duration > LENGTH_VAR_MAX)
+    		duration = LENGTH_VAR_MAX;
+    	
+    	mDuration = duration;
+    	return this;
+    }
+    
+    public TastyToast disableVariableDuration(int replacementDuration){
+    	this.mDuration = replacementDuration;
+    	return this;
+    }
 
 	public static class Style{
 		private final int duration;

@@ -37,5 +37,26 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:text="Can Swipe?" />
+    
+    <CheckBox android:id="@+id/enable_variable_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Enable variable duration" />
+
+    <EditText
+        android:id="@+id/text_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:inputType="textMultiLine"
+        android:hint="Enter random long text here"
+        android:visibility="gone" >
+
+    </EditText>
 
 </LinearLayout>

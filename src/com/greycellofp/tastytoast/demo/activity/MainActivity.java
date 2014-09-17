@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import com.greycellofp.tastytoast.R;
 import com.greycellofp.tastytoast.library.TastyToast;
@@ -17,6 +19,9 @@ public class MainActivity extends Activity implements OnClickListener{
 	private Button confirmButton;
 	private Button messageButton;
 	private CheckBox canSwipeCheckbox;
+	private CheckBox enableVariableDuration;
+	private TextView textInput;
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,36 +36,76 @@ public class MainActivity extends Activity implements OnClickListener{
 		confirmButton = (Button) findViewById(R.id.confirm_button);
 		messageButton = (Button) findViewById(R.id.message_button);
 		canSwipeCheckbox = (CheckBox) findViewById(R.id.can_swipe_checkbox);
+		enableVariableDuration = (CheckBox) findViewById(R.id.enable_variable_duration);
+		textInput = (TextView) findViewById(R.id.text_input);
 	}
 	
 	private void setUiListeners(){
 		alertButton.setOnClickListener(this);
 		confirmButton.setOnClickListener(this);
 		messageButton.setOnClickListener(this);
+		enableVariableDuration.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if(isChecked){
+					textInput.setVisibility(View.VISIBLE);
+				}else{
+					textInput.setVisibility(View.GONE);
+				}
+			}
+		});
 	}
 
 	@Override
 	public void onClick(View view) {
 		int id = view.getId();
+		TastyToast tastyToast = null;
 		switch(id){
-			case R.id.alert_button:
+			case R.id.alert_button:{
+				String text = "Example Alert message";
+				if(enableVariableDuration.isChecked()){
+					text = textInput.getText().toString();
+					tastyToast = TastyToast.makeText(this, text, TastyToast.STYLE_ALERT).enableVariableDuration();
+				}else{
+					tastyToast = TastyToast.makeText(this, text, TastyToast.STYLE_ALERT);
+				}
+				
 				if(canSwipeCheckbox.isChecked())
-					TastyToast.makeText(this, "Example Alert message", TastyToast.STYLE_ALERT).enableSwipeDismiss().show();
-				else
-					TastyToast.makeText(this, "Example Alert message", TastyToast.STYLE_ALERT).show();
+					tastyToast.enableSwipeDismiss();
+				
 				break;
-			case R.id.confirm_button:
+			}
+			case R.id.confirm_button:{
+				String text = "Example Confirm message";
+				if(enableVariableDuration.isChecked()){
+					text = textInput.getText().toString();
+					tastyToast = TastyToast.makeText(this, text, TastyToast.STYLE_CONFIRM).enableVariableDuration();
+				}else{
+					tastyToast = TastyToast.makeText(this, text, TastyToast.STYLE_CONFIRM);
+				}
+				
 				if(canSwipeCheckbox.isChecked())
-					TastyToast.makeText(this, "Example Confirm message", TastyToast.STYLE_CONFIRM).enableSwipeDismiss().show();
-				else
-					TastyToast.makeText(this, "Example Confirm message", TastyToast.STYLE_CONFIRM).show();
+					tastyToast.enableSwipeDismiss();
+				
 				break;
-			case R.id.message_button:
+			}
+			case R.id.message_button:{
+				String text = "Example simple message";
+				if(enableVariableDuration.isChecked()){
+					text = textInput.getText().toString();
+					tastyToast = TastyToast.makeText(this, text, TastyToast.STYLE_MESSAGE).enableVariableDuration();
+				}else{
+					tastyToast = TastyToast.makeText(this, text, TastyToast.STYLE_MESSAGE);
+				}
+				
 				if(canSwipeCheckbox.isChecked())
-					TastyToast.makeText(this, "Example simple message", TastyToast.STYLE_MESSAGE).enableSwipeDismiss().show();
-				else
-					TastyToast.makeText(this, "Example simple message", TastyToast.STYLE_MESSAGE).show();
+					tastyToast.enableSwipeDismiss();
+				
 				break;
+			}
+		}
+		if(tastyToast != null){
+			tastyToast.show();
 		}
 	}
 }

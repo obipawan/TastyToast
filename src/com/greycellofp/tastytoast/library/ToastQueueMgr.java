@@ -30,21 +30,21 @@ class ToastQueueMgr extends Handler {
 		return mInstance;
 	}
 
-	void add(TastyToast TastyToast){
-		msgQueue.add(TastyToast);
+	void add(TastyToast tastyToast){
+		msgQueue.add(tastyToast);
 		if (inAnimation == null) 
-			inAnimation = AnimationUtils.loadAnimation(TastyToast.getActivity(), android.R.anim.fade_in);
+			inAnimation = AnimationUtils.loadAnimation(tastyToast.getActivity(), android.R.anim.fade_in);
 		if (outAnimation == null) 
-			outAnimation = AnimationUtils.loadAnimation(TastyToast.getActivity(), android.R.anim.fade_out);
+			outAnimation = AnimationUtils.loadAnimation(tastyToast.getActivity(), android.R.anim.fade_out);
 		displayMsg();
 	}
 
-	void clearMsg(TastyToast TastyToast){
-		if (msgQueue.contains(TastyToast)){
+	void clearMsg(TastyToast tastyToast){
+		if (msgQueue.contains(tastyToast)){
 			// Avoid the message from being removed twice.
 			removeMessages(MESSAGE_REMOVE);
-			msgQueue.remove(TastyToast);
-			removeMsg(TastyToast);
+			msgQueue.remove(tastyToast);
+			removeMsg(tastyToast);
 		}
 	}
 
@@ -61,67 +61,67 @@ class ToastQueueMgr extends Handler {
 			return;
 
 		// First peek whether the TastyToast is being displayed.
-		final TastyToast TastyToast = msgQueue.peek();
+		final TastyToast tastyToast = msgQueue.peek();
 		// If the activity is null we throw away the TastyToast.
-		if (TastyToast.getActivity() == null) 
+		if (tastyToast.getActivity() == null) 
 			msgQueue.poll();
 		final Message msg;
-		if (!TastyToast.isShowing()){
+		if (!tastyToast.isShowing()){
 			// Display the TastyToast
 			msg = obtainMessage(MESSAGE_ADD_VIEW);
-			msg.obj = TastyToast;
+			msg.obj = tastyToast;
 			sendMessage(msg);
 		} 
 		else{
 			msg = obtainMessage(MESSAGE_DISPLAY);
-			sendMessageDelayed(msg, TastyToast.getDuration() + inAnimation.getDuration() + outAnimation.getDuration());
+			sendMessageDelayed(msg, tastyToast.getDuration() + inAnimation.getDuration() + outAnimation.getDuration());
 		}
 	}
 
-	private void removeMsg(final TastyToast TastyToast){
-		ViewGroup parent = ((ViewGroup) TastyToast.getView().getParent());
+	private void removeMsg(final TastyToast tastyToast){
+		ViewGroup parent = ((ViewGroup) tastyToast.getView().getParent());
 		if (parent != null){
-			outAnimation.setAnimationListener(new OutAnimationListener(TastyToast));
-			TastyToast.getView().startAnimation(outAnimation);
+			outAnimation.setAnimationListener(new OutAnimationListener(tastyToast));
+			tastyToast.getView().startAnimation(outAnimation);
 			// Remove the TastyToast from the queue.
 			msgQueue.poll();
-			if (TastyToast.isFloating()) 
-				parent.removeView(TastyToast.getView());
+			if (tastyToast.isFloating()) 
+				parent.removeView(tastyToast.getView());
 			else 
-				TastyToast.getView().setVisibility(View.INVISIBLE);
+				tastyToast.getView().setVisibility(View.INVISIBLE);
 
 			Message msg = obtainMessage(MESSAGE_DISPLAY);
 			sendMessage(msg);
 		}
 	}
 
-	private void addMsgToView(TastyToast TastyToast){
-		View view = TastyToast.getView();
+	private void addMsgToView(TastyToast tastyToast){
+		View view = tastyToast.getView();
 		if (view.getParent() == null) 
-			TastyToast.getActivity().addContentView(view, TastyToast.getLayoutParams());
+			tastyToast.getActivity().addContentView(view, tastyToast.getLayoutParams());
 
 		view.startAnimation(inAnimation);
 		if (view.getVisibility() != View.VISIBLE) 
 			view.setVisibility(View.VISIBLE);
 		final Message msg = obtainMessage(MESSAGE_REMOVE);
-		msg.obj = TastyToast;
-		sendMessageDelayed(msg, TastyToast.getDuration());
+		msg.obj = tastyToast;
+		sendMessageDelayed(msg, tastyToast.getDuration());
 	}
 
 	@Override
 	public void handleMessage(Message msg){
-		final TastyToast TastyToast;
+		final TastyToast tastyToast;
 		switch (msg.what){
 			case MESSAGE_DISPLAY:
 				displayMsg();
 				break;
 			case MESSAGE_ADD_VIEW:
-				TastyToast = (TastyToast) msg.obj;
-				addMsgToView(TastyToast);
+				tastyToast = (TastyToast) msg.obj;
+				addMsgToView(tastyToast);
 				break;
 			case MESSAGE_REMOVE:
-				TastyToast = (TastyToast) msg.obj;
-				removeMsg(TastyToast);
+				tastyToast = (TastyToast) msg.obj;
+				removeMsg(tastyToast);
 				break;
 			default:
 				super.handleMessage(msg);
@@ -130,10 +130,10 @@ class ToastQueueMgr extends Handler {
 	}
 
 	private static class OutAnimationListener implements Animation.AnimationListener{
-		private TastyToast TastyToast;
+		private TastyToast tastyToast;
 
-		private OutAnimationListener(TastyToast TastyToast){
-			this.TastyToast = TastyToast;
+		private OutAnimationListener(TastyToast tastyToast){
+			this.tastyToast = tastyToast;
 		}
 
 		@Override
@@ -141,8 +141,8 @@ class ToastQueueMgr extends Handler {
 
 		@Override
 		public void onAnimationEnd(Animation animation) {
-			if (!TastyToast.isFloating()) 
-				TastyToast.getView().setVisibility(View.GONE);
+			if (!tastyToast.isFloating()) 
+				tastyToast.getView().setVisibility(View.GONE);
 		}
 
 		@Override
