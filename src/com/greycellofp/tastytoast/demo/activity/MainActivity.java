@@ -2,11 +2,14 @@ package com.greycellofp.tastytoast.demo.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.greycellofp.tastytoast.R;
@@ -20,8 +23,8 @@ public class MainActivity extends Activity implements OnClickListener{
 	private Button messageButton;
 	private CheckBox canSwipeCheckbox;
 	private CheckBox enableVariableDuration;
-	private TextView textInput;
-	
+	private EditText textInput;
+	private TextView inputTextSize;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +40,8 @@ public class MainActivity extends Activity implements OnClickListener{
 		messageButton = (Button) findViewById(R.id.message_button);
 		canSwipeCheckbox = (CheckBox) findViewById(R.id.can_swipe_checkbox);
 		enableVariableDuration = (CheckBox) findViewById(R.id.enable_variable_duration);
-		textInput = (TextView) findViewById(R.id.text_input);
+		textInput = (EditText) findViewById(R.id.text_input);
+		inputTextSize = (TextView) findViewById(R.id.input_text_size);
 	}
 	
 	private void setUiListeners(){
@@ -49,9 +53,28 @@ public class MainActivity extends Activity implements OnClickListener{
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				if(isChecked){
 					textInput.setVisibility(View.VISIBLE);
+					inputTextSize.setVisibility(View.VISIBLE);
 				}else{
 					textInput.setVisibility(View.GONE);
+					inputTextSize.setVisibility(View.GONE);
 				}
+			}
+		});
+		
+		textInput.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				inputTextSize.setText("Size:" + s.length());
 			}
 		});
 	}
