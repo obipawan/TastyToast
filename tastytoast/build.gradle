@@ -38,9 +38,9 @@ task installArchives(type: Upload) {
     repositories {
         mavenDeployer {
             repository url: "file://${System.properties['user.home']}/.m2/repository"
-            pom.groupId = 'com.greycellofp'
-            pom.artifactId = 'tastytoast'
-            pom.version = '1.0.0-SNAPSHOT'
+            pom.groupId = GROUP
+            pom.artifactId = POM_ARTIFACT_ID
+            pom.version = VERSION_NAME
         }
     }
 }
