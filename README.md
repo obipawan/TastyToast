@@ -9,12 +9,12 @@ Add this in your project app's ```build.gradle```
 
 ```sh
 dependencies{
-    compile 'com.greycellofp:tastytoast:1.0.1'
+    compile 'com.greycellofp:tastytoast:1.0.2'
 }
 ```
 
 ### Version
-1.0.1
+1.0.2
 
 #Quick Usage
   - **Message Toasts**
@@ -58,6 +58,16 @@ makeText(Activity context, CharSequence text, Style style, View customView)
 ```java
 float textSize = 20; //you should of course consider converting to sp
 TastyToast.makeText(YourActivity.this, "Some text", TastyToast.STYLE_MESSAGE, textSize).show();
+```
+
+  - **In/Out Animations**
+```java
+TastyToast.Style style = TastyToast.STYLE_MESSAGE;
+Animation inAnimation; //set your custom In animation
+Animation outAnimation; //set your custom Out animation
+style.setOutAnimation(outAnimation);
+style.setInAnimation(inAnimation);
+TastyToast.makeText(YourActivty.this, "your message text", style).show();
 ```
 
 ### Development
