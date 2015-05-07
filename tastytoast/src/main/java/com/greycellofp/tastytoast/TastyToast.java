@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.view.animation.Animation;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -31,6 +32,8 @@ public class TastyToast {
     private View mView;
     private ViewGroup.LayoutParams mLayoutParams;
     private boolean mFloating;
+    private Animation inAnimation;
+    private Animation outAnimation;
 
     public TastyToast(Activity context) {
         mContext = context;
@@ -77,6 +80,8 @@ public class TastyToast {
         result.mView = view;
         result.mDuration = style.duration;
         result.mFloating = floating;
+        result.setInAnimation(style.getInAnimation());
+        result.setOutAnimation(style.getOutAnimation());
 
         return result;
     }
@@ -171,6 +176,22 @@ public class TastyToast {
         this.mFloating = mFloating;
     }
 
+    public Animation getInAnimation() {
+        return inAnimation;
+    }
+
+    public void setInAnimation(Animation inAnimation) {
+        this.inAnimation = inAnimation;
+    }
+
+    public Animation getOutAnimation() {
+        return outAnimation;
+    }
+
+    public void setOutAnimation(Animation outAnimation) {
+        this.outAnimation = outAnimation;
+    }
+
     public TastyToast enableSwipeDismiss(){
         View v = getView();
         v.setOnTouchListener(new SwipeDismissTouchListener
@@ -212,6 +233,8 @@ public class TastyToast {
     public static class Style{
         private final int duration;
         private final int background;
+        private Animation inAnimation;
+        private Animation outAnimation;
 
         public Style(int duration, int resId){
             this.duration = duration;
@@ -224,6 +247,22 @@ public class TastyToast {
 
         public int getBackground(){
             return background;
+        }
+
+        public Animation getInAnimation() {
+            return inAnimation;
+        }
+
+        public void setInAnimation(Animation inAnimation) {
+            this.inAnimation = inAnimation;
+        }
+
+        public Animation getOutAnimation() {
+            return outAnimation;
+        }
+
+        public void setOutAnimation(Animation outAnimation) {
+            this.outAnimation = outAnimation;
         }
 
         @Override

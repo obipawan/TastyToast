@@ -21,7 +21,6 @@ public class ToastQueueMgr extends Handler{
     private static ToastQueueMgr mInstance;
 
     private Queue<TastyToast> msgQueue;
-    private Animation inAnimation, outAnimation;
 
     private ToastQueueMgr(){
         msgQueue = new LinkedList<TastyToast>();
@@ -35,10 +34,6 @@ public class ToastQueueMgr extends Handler{
 
     void add(TastyToast tastyToast){
         msgQueue.add(tastyToast);
-        if (inAnimation == null)
-            inAnimation = AnimationUtils.loadAnimation(tastyToast.getActivity(), android.R.anim.fade_in);
-        if (outAnimation == null)
-            outAnimation = AnimationUtils.loadAnimation(tastyToast.getActivity(), android.R.anim.fade_out);
         displayMsg();
     }
 
@@ -65,6 +60,15 @@ public class ToastQueueMgr extends Handler{
 
         // First peek whether the TastyToast is being displayed.
         final TastyToast tastyToast = msgQueue.peek();
+        
+        Animation inAnimation = tastyToast.getInAnimation();
+        Animation outAnimation = tastyToast.getOutAnimation();
+        if(inAnimation == null){
+            inAnimation = AnimationUtils.loadAnimation(tastyToast.getActivity(), android.R.anim.fade_in);
+        }
+        if(outAnimation == null){
+            outAnimation = AnimationUtils.loadAnimation(tastyToast.getActivity(), android.R.anim.fade_out);
+        }
         // If the activity is null we throw away the TastyToast.
         if (tastyToast.getActivity() == null)
             msgQueue.poll();
@@ -84,6 +88,10 @@ public class ToastQueueMgr extends Handler{
     private void removeMsg(final TastyToast tastyToast){
         ViewGroup parent = ((ViewGroup) tastyToast.getView().getParent());
         if (parent != null){
+            Animation outAnimation = tastyToast.getOutAnimation();
+            if(outAnimation == null){
+                outAnimation = AnimationUtils.loadAnimation(tastyToast.getActivity(), android.R.anim.fade_out);
+            }
             outAnimation.setAnimationListener(new OutAnimationListener(tastyToast));
             tastyToast.getView().startAnimation(outAnimation);
             // Remove the TastyToast from the queue.
@@ -103,6 +111,10 @@ public class ToastQueueMgr extends Handler{
         if (view.getParent() == null)
             tastyToast.getActivity().addContentView(view, tastyToast.getLayoutParams());
 
+        Animation inAnimation = tastyToast.getInAnimation();
+        if(inAnimation == null){
+            inAnimation = AnimationUtils.loadAnimation(tastyToast.getActivity(), android.R.anim.fade_in);
+        }
         view.startAnimation(inAnimation);
         if (view.getVisibility() != View.VISIBLE)
             view.setVisibility(View.VISIBLE);
