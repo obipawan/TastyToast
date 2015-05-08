@@ -36,6 +36,13 @@ public class ToastQueueMgr extends Handler{
         msgQueue.add(tastyToast);
         displayMsg();
     }
+    
+    void remove(TastyToast tastyToast){
+        if(!msgQueue.contains(tastyToast)){
+            msgQueue.remove(tastyToast);
+        }
+        removeMsg(tastyToast);
+    }
 
     void clearMsg(TastyToast tastyToast){
         if (msgQueue.contains(tastyToast)){

@@ -205,7 +205,7 @@ public class TastyToast {
                             @Override
                             public void onDismiss(View view, Object token){
                                 getView().setVisibility(View.GONE);
-                                ToastQueueMgr.getInstance().clearMsg(TastyToast.this);
+                                ToastQueueMgr.getInstance().remove(TastyToast.this);
                             }
                         }
                 ));
